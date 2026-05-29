@@ -1,11 +1,14 @@
 package com.linklytics.service;
 
+import com.linklytics.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -26,18 +29,29 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
+    public static UserDetailsImpl build(User user){
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
+        return new UserDetailsImpl(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                Collections.singletonList(authority)
+        );
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return "";
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return "";
+        return username;
     }
 }
