@@ -1,7 +1,7 @@
 package com.linklytics.service;
 
 import com.linklytics.model.User;
-import lombok.AllArgsConstructor;
+// ...existing code... (removed unused AllArgsConstructor)
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
     private Long id;
@@ -21,10 +20,11 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     List<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String email, Long id, String username, String password, List<? extends GrantedAuthority> authorities) {
-        this.email = email;
+    // Ensure constructor parameter order matches fields: id, username, email, password, authorities
+    public UserDetailsImpl(Long id, String username, String email, String password, List<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
