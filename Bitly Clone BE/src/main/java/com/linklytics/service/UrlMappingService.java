@@ -4,13 +4,16 @@ import com.linklytics.Repository.ClickEventRepository;
 import com.linklytics.Repository.UrlMappingRepository;
 import com.linklytics.dto.ClickEventDto;
 import com.linklytics.dto.UrlMappingDto;
+import com.linklytics.model.ClickEvent;
 import com.linklytics.model.UrlMapping;
 import com.linklytics.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -78,5 +81,12 @@ public class UrlMappingService {
 
         }
         return null;
+    }
+
+    public Map<LocalDate, Long> getTotalClicksByUserAndDate(User user, LocalDate start, LocalDate end) {
+        List<UrlMapping> urlMappings = urlMappingRepository.findByUser(user);
+        List<ClickEvent> clickEvents = clickEventRepository.findByUrlMappingInAndClickDateBetween(urlMappings, start.atStartOfDay(), end.plusDays(1).atStartOfDay());
+        return clickEvents.stream()
+                .collect(Collectors.groupingBy(click -> click.getClickDate().toLocalDate(), Collectors.counting()));
     }
 }
