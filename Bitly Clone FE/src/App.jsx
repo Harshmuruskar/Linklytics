@@ -1,20 +1,15 @@
-
 import './App.css'
+import { BrowserRouter as Router } from 'react-router-dom'
+import { getApps } from './utils/helper'
 
 function App() {
- 
+
+  const CurrentApp = getApps();
 
   return (
-    <>
-     <BrowserRouter>
-      <Routes >
-      <Route path='/' element={<LandingPage/>}/>
-       
-      </Routes>
-     </BrowserRouter>
-      
-    
-    </>
+    <Router>
+      <CurrentApp />
+    </Router>
   )
 }
 
