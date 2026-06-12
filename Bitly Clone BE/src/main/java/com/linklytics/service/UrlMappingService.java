@@ -8,8 +8,10 @@ import com.linklytics.model.ClickEvent;
 import com.linklytics.model.UrlMapping;
 import com.linklytics.model.User;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.http.HttpHeaders;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +28,7 @@ public class UrlMappingService {
     private final ClickEventRepository clickEventRepository;
 
     public UrlMappingDto createShortUrl(String originalUrl, User user) {
-        String shortUrl = generateShortUrl(originalUrl);
+        String shortUrl = generateShortUrl(originalUrl  );
         UrlMapping urlMapping = new UrlMapping();
         urlMapping.setOriginalUrl(originalUrl);
         urlMapping.setShortUrl(shortUrl);
@@ -88,5 +90,21 @@ public class UrlMappingService {
         List<ClickEvent> clickEvents = clickEventRepository.findByUrlMappingInAndClickDateBetween(urlMappings, start.atStartOfDay(), end.plusDays(1).atStartOfDay());
         return clickEvents.stream()
                 .collect(Collectors.groupingBy(click -> click.getClickDate().toLocalDate(), Collectors.counting()));
+    }
+
+    public UrlMapping getOriginalUrl(String shortUrl) {
+        UrlMapping urlMapping = urlMappingRepository.findByShortUrl(shortUrl);
+        if (urlMapping!= null){
+            urlMapping.setClickCount(urlMapping.getClickCount()+1);
+            urlMappingRepository.save(urlMapping);
+
+            ClickEvent clickEvent = new ClickEvent();
+            clickEvent.setClickDate(LocalDateTime.now());
+            clickEvent.setUrlMapping(urlMapping);
+            clickEventRepository.save(clickEvent);
+
+        }
+        return urlMapping;
+
     }
 }

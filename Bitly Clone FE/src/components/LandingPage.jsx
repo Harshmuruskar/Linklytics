@@ -1,9 +1,9 @@
-import React from 'react' 
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useStoreContext } from '../contextApi/contextApi.jsx'
-import Card from "./Card.jsx"  
-  
+import Card from "./Card.jsx"
+
 
 let desc =
   "Generate short, memorable links with ease using Linklytics’s intuitive interface. Share URLs effortlessly across platforms. Optimize your sharing strategy with Linklytics. Track clicks and manage your links seamlessly to enhance your online presence. Generate short, memorable links with ease using Linklytics’s intuitive interface. Share URLs effortlessly across platforms.";

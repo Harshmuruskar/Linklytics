@@ -15,7 +15,6 @@ import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 import java.util.Map;
 
@@ -67,8 +66,8 @@ public class UrlMappingController {
                                                                     @RequestParam String endDate){
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
         User user = userService.findUserByUsername(principal.getName());
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
+        LocalDate start = LocalDate.parse(startDate.split("T")[0], formatter);
+        LocalDate end = LocalDate.parse(endDate.split("T")[0], formatter);
         Map<LocalDate,Long> totalClicks = urlMappingService.getTotalClicksByUserAndDate(user, start, end);
         return ResponseEntity.ok(totalClicks);
 
